@@ -1,4 +1,5 @@
 int playerSize = 20;
+int score=0;
 
 void setup(){
     size(1000,1000);
@@ -10,8 +11,15 @@ void draw(){
   background(240);
   /**joueur*/
   circle(mouseX,mouseY, playerSize);
+  
+  PFont font;
+  font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
+  textFont(font);
+  fill(0);
+  text("Score: " + score,850,50);
     
 }
 void intro(){ 
   
 }
+
