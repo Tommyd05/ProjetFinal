@@ -4,6 +4,8 @@ boolean intro = true;
 int skin = 1;
 color[] skins = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
 color(255,255,0), color(255,0,255), color(0,255,255)};
+int aX=0;
+int aY=0;
 
 void setup(){
     size(1000,1000);
@@ -11,21 +13,33 @@ void setup(){
     intro();
 }
 void draw(){
-  couleur();
-  if (!intro){
-    noCursor();
+  if (intro){
+      couleur();
+  }
+  else{
     background(240);
     /**joueur*/
     fill(skins[skin]);
     PShape player = createShape(ELLIPSE,mouseX,mouseY, playerSize, playerSize);
     shape(player);
-  
-    PFont font;
-    font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
-    textFont(font);
-    fill(0);
-    text("Score: " + score,850,50);
+    
+    printScore();
   }  
+}
+void mousePressed(){
+  if(intro){
+    if (mouseX<660&&mouseX>340&&mouseY<710&&mouseY>590){
+      intro = false;
+      loop();
+      noCursor();
+    }
+    else if (skin<6){
+      skin++;
+    }
+    else{
+      skin=0;
+    }
+  }
 }
 void intro(){ 
   if(intro){
@@ -53,17 +67,15 @@ void couleur(){
   }
   circle(500,500,70);
 }  
-void mousePressed(){
-  if(intro){
-    if (mouseX<660&&mouseX>340&&mouseY<710&&mouseY>590){
-      intro = false;
-      loop();
-    }
-    else if (skin<6){
-      skin++;
-    }
-    else{
-      skin=0;
-    }
+void printScore(){
+  PFont font;
+  font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
+  textFont(font);
+  fill(0);
+  text("Score: " + score,850,50);
+}
+void score(){
+  if ((aX-mouseX)<30&&(aX-mouseX)>-30&&(aY-mouseY)<30&&(aY-mouseY)>-30) {
+    score++;
   }
 }
