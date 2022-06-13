@@ -21,8 +21,7 @@ void draw(){
   text("Score: " + score,850,50);
     
 }
-void intro(){ 
-  
+void intro(){
 }
 
 void score(){
