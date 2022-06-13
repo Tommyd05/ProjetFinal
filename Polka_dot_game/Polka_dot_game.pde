@@ -1,5 +1,7 @@
 int playerSize = 20;
 int score=0;
+int aX=0;
+int aY=0;
 
 void setup(){
     size(1000,1000);
@@ -19,7 +21,11 @@ void draw(){
   text("Score: " + score,850,50);
     
 }
-void intro(){ 
-  
+void intro(){
 }
 
+void score(){
+  if ((aX-mouseX)<30&&(aX-mouseX)>-30&&(aY-mouseY)<30&&(aY-mouseY)>-30) {
+    score++;
+  }
+}
