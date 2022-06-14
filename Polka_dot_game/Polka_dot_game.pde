@@ -1,5 +1,9 @@
 int playerSize = 20;
-int score = 0;
+
+int score=0;
+int heightBall=0;
+boolean ballKill=false;
+
 boolean intro = true;
 int skin = 1;
 color[] skins = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
@@ -7,11 +11,31 @@ color(255,255,0), color(255,0,255), color(0,255,255)};
 int aX=0;
 int aY=0;
 
-void setup(){
+int[] ballSize=new int[3];
+PShape[] balls=new PShape[3];
+int[] startPoint=new int[3];
+
+void ballSize() {
+  for (int n=0;n<3;n++) {
+    ballSize[n]=(int)(((Math.random()*1000))/2);
+  }
+}
+
+void startPoint() {
+  for (int n=0;n<3;n++) {
+    startPoint[n]=(int)((Math.random()*1000));
+  }
+}
+
+void setup() {
+    ballSize();
+    startPoint();
+  
     size(1000,1000);
     background(240);
     intro();
 }
+
 void draw(){
   if (intro){
       couleur();
@@ -24,6 +48,15 @@ void draw(){
     shape(player);
     
     printScore();
+    
+  background(240);
+  /**joueur*/
+  fill(0);
+  circle(mouseX,mouseY, playerSize);
+  
+  randomBalls();
+  
+  scoreChange();
   }  
 }
 void mousePressed(){
@@ -66,14 +99,37 @@ void couleur(){
     }
   }
   circle(500,500,70);
-}  
+}
+
 void printScore(){
   PFont font;
   font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
   textFont(font);
-  fill(0);
+  fill(0,255,0);
   text("Score: " + score,850,50);
+
+void scoreChange(){
+  for (int n=0;n<3;n++) {
+    if ((startPoint[n]-mouseX)<30&&(startPoint[n]-mouseX)>-30&&(heightBall-mouseY)<30&&(heightBall-mouseY)>-30) {
+      score++;
+      ballKill=true;
+      heightBall=-100;
+    }
+  }
 }
+
+
+void randomBalls(){
+  for (int n=0;n<3;n++) {
+    //if (ballKill==false) {  
+       fill(0);
+       balls[n]=createShape(ELLIPSE,startPoint[n],heightBall,ballSize[n],ballSize[n]);
+       shape(balls[n]);
+       heightBall++;
+    //}
+    //else{}
+}
+
 void score(){
   if ((aX-mouseX)<30&&(aX-mouseX)>-30&&(aY-mouseY)<30&&(aY-mouseY)>-30) {
     score++;
