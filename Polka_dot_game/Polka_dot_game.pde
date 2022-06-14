@@ -1,13 +1,14 @@
+
 int playerSize = 20;
 int score = 0;
 boolean intro = true;
-int skin = 1;
-color[] skins = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
-color(255,255,0), color(255,0,255), color(0,255,255)};
+int flag = 0;
+PImage[] flags = new PImage[17];
 int aX=0;
 int aY=0;
 
 void setup(){
+    assignFlag();
     size(1000,1000);
     background(240);
     intro();
@@ -19,7 +20,7 @@ void draw(){
   else{
     background(240);
     /**joueur*/
-    fill(skins[skin]);
+    fill(flags[flag]);
     PShape player = createShape(ELLIPSE,mouseX,mouseY, playerSize, playerSize);
     shape(player);
     
@@ -33,11 +34,11 @@ void mousePressed(){
       loop();
       noCursor();
     }
-    else if (skin<6){
-      skin++;
+    else if (flag<17){
+      flag++;
     }
     else{
-      skin=0;
+      flag=0;
     }
   }
 }
@@ -61,11 +62,10 @@ void couleur(){
   fill(0);
   circle(500,500,72);
   for (int i=0;i<7;i++){
-    if (skin==i){
-      fill(skins[i]);
+    if (flag==i){
+      image(flags[flag], 500,500,70,70);
     }
   }
-  circle(500,500,70);
 }  
 void printScore(){
   PFont font;
@@ -77,5 +77,12 @@ void printScore(){
 void score(){
   if ((aX-mouseX)<30&&(aX-mouseX)>-30&&(aY-mouseY)<30&&(aY-mouseY)>-30) {
     score++;
+  }
+}
+void assignFlag(){
+  for (int n = 0;n<17;n++){
+    Scanner flagScanner = new Scanner(new File("flags.txt"));
+    flags[n] = flagScanner.nextLine();
+    flagScanner.close();
   }
 }
