@@ -1,35 +1,48 @@
 int playerSize = 20;
 
 int score=0;
-int heightBall=0;
 boolean ballKill=false;
 
 boolean intro = true;
 int skin = 1;
 color[] skins = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
 color(255,255,0), color(255,0,255), color(0,255,255)};
-int aX=0;
-int aY=0;
 
-int[] ballSize=new int[3];
-PShape[] balls=new PShape[3];
-int[] startPoint=new int[3];
+int numberOfBalls=(int)((Math.random()*100)/4);
+int[] heightBall=new int[numberOfBalls];
+int[] speed=new int[numberOfBalls];
+int[] ballSize=new int[numberOfBalls];
+PShape[] balls=new PShape[numberOfBalls];
+int[] startPoint=new int[numberOfBalls];
 
 void ballSize() {
-  for (int n=0;n<3;n++) {
-    ballSize[n]=(int)(((Math.random()*1000))/2);
+  for (int n=0;n<numberOfBalls;n++) {
+    ballSize[n]=(int)((Math.random()*1000)/4);
   }
 }
 
 void startPoint() {
-  for (int n=0;n<3;n++) {
-    startPoint[n]=(int)((Math.random()*1000));
+  for (int n=0;n<numberOfBalls;n++) {
+    startPoint[n]=(int)(Math.random()*1000);
+  }
+}
+
+void ballSpeed() {
+  for (int n=0;n<numberOfBalls;n++) {
+    speed[n]=(int)(((Math.random()*100)/5)+1);
+  }
+}
+
+void ballHeightStart() {
+  for (int n=0;n<numberOfBalls;n++) {
+    heightBall[n]=0;
   }
 }
 
 void setup() {
     ballSize();
     startPoint();
+    ballSpeed();
   
     size(1000,1000);
     background(240);
@@ -47,16 +60,10 @@ void draw(){
     PShape player = createShape(ELLIPSE,mouseX,mouseY, playerSize, playerSize);
     shape(player);
     
-    printScore();
-    
-  background(240);
-  /**joueur*/
-  fill(0);
-  circle(mouseX,mouseY, playerSize);
+  printScore();
   
   randomBalls();
-  
-  scoreChange();
+  touchBall();
   }  
 }
 void mousePressed(){
@@ -90,7 +97,7 @@ void intro(){
     
   }
 }
-void couleur(){
+void couleur() {
   fill(0);
   circle(500,500,72);
   for (int i=0;i<7;i++){
@@ -101,7 +108,7 @@ void couleur(){
   circle(500,500,70);
 }
 
-void printScore(){
+void printScore() {
   PFont font;
   font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
   textFont(font);
@@ -109,24 +116,24 @@ void printScore(){
   text("Score: " + score,850,50);
 }
 
-void scoreChange(){
-  for (int n=0;n<3;n++) {
-    if ((startPoint[n]-mouseX)<30&&(startPoint[n]-mouseX)>-30&&(heightBall-mouseY)<30&&(heightBall-mouseY)>-30) {
+void touchBall(){
+  for (int n=0;n<numberOfBalls;n++) {
+    if ((startPoint[n]-mouseX)<30&&(startPoint[n]-mouseX)>-30&&(heightBall[n]-mouseY)<30&&(heightBall[n]-mouseY)>-30) {
       score++;
       ballKill=true;
-      heightBall=-100;
+      heightBall[n]=-1000;
     }
   }
 }
 
 
 void randomBalls() {
-  for (int n=0;n<3;n++) {
+  for (int n=0;n<numberOfBalls;n++) {
     //if (ballKill==false) {  
        fill(0);
-       balls[n]=createShape(ELLIPSE,startPoint[n],heightBall,ballSize[n],ballSize[n]);
+       balls[n]=createShape(ELLIPSE,startPoint[n],heightBall[n],ballSize[n],ballSize[n]);
        shape(balls[n]);
-       heightBall++;
+       heightBall[n]+=speed[n];
     //}
     //else{}
   }
