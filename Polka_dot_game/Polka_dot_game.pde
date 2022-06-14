@@ -120,6 +120,7 @@ void touchBall(){
   for (int n=0;n<numberOfBalls;n++) {
     if ((startPoint[n]-mouseX)<30&&(startPoint[n]-mouseX)>-30&&(heightBall[n]-mouseY)<30&&(heightBall[n]-mouseY)>-30) {
       score++;
+      playerSize+=3;
       ballKill=true;
       heightBall[n]=-1000;
     }
