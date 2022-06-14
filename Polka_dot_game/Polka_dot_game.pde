@@ -131,9 +131,3 @@ void randomBalls() {
     //else{}
   }
 }
-
-void score(){
-  if ((aX-mouseX)<30&&(aX-mouseX)>-30&&(aY-mouseY)<30&&(aY-mouseY)>-30) {
-    score++;
-  }
-}
