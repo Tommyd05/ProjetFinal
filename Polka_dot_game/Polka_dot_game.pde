@@ -107,6 +107,7 @@ void printScore(){
   textFont(font);
   fill(0,255,0);
   text("Score: " + score,850,50);
+}
 
 void scoreChange(){
   for (int n=0;n<3;n++) {
@@ -119,7 +120,7 @@ void scoreChange(){
 }
 
 
-void randomBalls(){
+void randomBalls() {
   for (int n=0;n<3;n++) {
     //if (ballKill==false) {  
        fill(0);
@@ -128,6 +129,7 @@ void randomBalls(){
        heightBall++;
     //}
     //else{}
+  }
 }
 
 void score(){
