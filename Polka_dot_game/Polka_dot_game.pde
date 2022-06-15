@@ -24,12 +24,6 @@ int[] widthBall=new int[numberOfBalls];
 int[] ballSpeedX=new int[numberOfBalls];
 int[] ballSpeedY=new int[numberOfBalls];
 int[] ballSize=new int[numberOfBalls];
-void setup(){
-    assignFlag();
-    size(1000,1000);
-    background(240);
-    intro();
-
 
 void ballSize() {
   for (int n=0;n<numberOfBalls;n++) {
@@ -64,6 +58,7 @@ void ballSpeedX() {
 
 
 void setup() {
+  assignFlag();
   widthBallStart();
   ballSize();
   ballHeightStart();
@@ -154,6 +149,7 @@ void peau(){
     }
     
   }
+}
 void printScore() {
   PFont font;
   font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
