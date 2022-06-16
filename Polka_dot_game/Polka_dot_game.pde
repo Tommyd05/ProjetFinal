@@ -1,3 +1,9 @@
+/**
+* Polka-dot game. Un genre de agar.io à un joueur.
+* Auteurs: Thomas Dufour, Zachary Wilson
+* Version: 17 juin 2022
+*/
+
 int playerSize = 20;
 
 int wallBall;
@@ -5,10 +11,11 @@ int wallBall;
 int score=0;
 boolean ballKill=false;
 
-boolean intro = true;
+boolean intro = true, dead = false;
 int peau = 0;
-
-color[] colours = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
+color[] ballColours = {color(255,150,0), color(200,255,200), color(0,0,100),
+color(120,0,150)};
+color[] skinColours = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
 color(255,255,0), color(255,0,255), color(0,255,255)};
 
 PImage[] flags = new PImage[17];
@@ -19,6 +26,7 @@ double curX;
 double curY;
 
 int numberOfBalls=20;
+boolean[] exists = new boolean[numberOfBalls];
 PShape[] balls=new PShape[numberOfBalls];
 
 int[] heightBall=new int[numberOfBalls];
@@ -29,7 +37,7 @@ int[] ballSize=new int[numberOfBalls];
 
 void ballSize() {
   for (int n=0;n<numberOfBalls;n++) {
-    ballSize[n]=(int)((Math.random()*100)/4);
+    ballSize[n]=n*5+playerSize-6;
   }
 }
     
@@ -62,7 +70,6 @@ void ballSpeedX() {
 void setup() {
   assignFlag();
   widthBallStart();
-  ballSize();
   ballHeightStart();
   ballSpeedX();
   ballSpeedY();
@@ -77,12 +84,11 @@ void draw(){
     peau();
   }
   else{
+    ballSize();
     background(240);
     /**joueur*/
-    fill(0);
-    circle(mouseX,mouseY,playerSize+2);
       if (peau < 7){
-        fill(colours[peau]);
+        fill(skinColours[peau]);
         circle(mouseX,mouseY,playerSize);
       }
       else{
@@ -109,6 +115,9 @@ void mousePressed(){
     else{
       peau=0;
     }
+  }
+  if (dead){
+    
   }
 }
 void intro(){ 
@@ -143,7 +152,7 @@ void peau(){
   circle(500,700,72);
   for (int i=0;i<24;i++){
     if(peau==i&&peau<7){
-      fill(colours[peau]);
+      fill(skinColours[peau]);
       circle(500,700,70);
     }
     else if (peau==i){
@@ -162,16 +171,28 @@ void printScore() {
 
 void touchBall(){
   for (int n=0;n<numberOfBalls;n++) {
-    
-    if ((widthBall[n]-mouseX)<30&&(widthBall[n]-mouseX)>-30&&(heightBall[n]-mouseY)<30&&(heightBall[n]-mouseY)>-30) {
-      score++;
-      playerSize+=3;
-      ballKill=true;
-      heightBall[n]=-1000;
+    if( collide(widthBall[n],heightBall[n], ballSize[n] )){
+      if (playerSize>ballSize[n]){
+        score++;
+        playerSize+=3;
+        ballKill=true;
+        heightBall[n]=-1000;
+      }
+      else{
+        death();
+      }
     }
   }
 }
-
+boolean collide(int w, int h, int size){
+  if ((w-mouseX)<(size+playerSize)/2+playerSize/2&&(w-mouseX)>-(size+playerSize)/2+playerSize/2){
+    if((h-mouseY)<(size+playerSize)/2+playerSize/2&&(h-mouseY)>-(size+playerSize)/2+playerSize/2){
+      return true;
+    }
+  }
+  return false; 
+  
+}
 void touchWall(){
   for (wallBall=0;wallBall<numberOfBalls;wallBall++) {
     if (widthBall[wallBall]<(0-ballSize[wallBall]-11)||widthBall[wallBall]>(1000+ballSize[wallBall]+11)||heightBall[wallBall]<(0-ballSize[wallBall]-11)||heightBall[wallBall]>(1000+ballSize[wallBall]+11)) {
@@ -192,7 +213,7 @@ void removeAddBall() {
 
 void ballsShowing() {
   for (int n=0;n<numberOfBalls;n++) {
-     fill(0);
+     fill(ballColours[n%4]);
      balls[n]=createShape(ELLIPSE,widthBall[n],heightBall[n],ballSize[n],ballSize[n]);
      shape(balls[n]);
      heightBall[n]+=ballSpeedY[n];
@@ -213,3 +234,12 @@ void assignFlag(){
     }
   }
 }
+void death(){
+    dead = true;
+    noLoop();
+    background(0);
+    fill(255);
+    textSize(100);
+    text("GAME OVER", 200,500);
+    
+  }
