@@ -195,10 +195,22 @@ boolean collide(int w, int h, int size){
 }
 void touchWall(){
   for (wallBall=0;wallBall<numberOfBalls;wallBall++) {
-    if (widthBall[wallBall]<(0-ballSize[wallBall]-11)||widthBall[wallBall]>(1000+ballSize[wallBall]+11)||heightBall[wallBall]<(0-ballSize[wallBall]-11)||heightBall[wallBall]>(1000+ballSize[wallBall]+11)) {
+    if  (wallHit(widthBall[wallBall], heightBall[wallBall], ballSize[wallBall])){
        removeAddBall();
     }
   }
+}
+boolean wallHit(int w, int h, int size){
+  if (w<(0-size-11)||w>(1000+size+11)){
+    return true;
+  }
+  else if(h<(0-size-11)||h>(1000+size+11)){
+    return true;
+  }
+  else {
+    return false;
+  }
+  
 }
 
 void removeAddBall() {
