@@ -7,8 +7,10 @@ boolean ballKill=false;
 
 boolean intro = true;
 int peau = 0;
+
 color[] colours = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
 color(255,255,0), color(255,0,255), color(0,255,255)};
+
 PImage[] flags = new PImage[17];
 int aX=0;
 int aY=0;
