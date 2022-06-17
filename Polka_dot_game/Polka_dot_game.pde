@@ -4,12 +4,11 @@
 * Version: 17 juin 2022
 */
 
-int playerSize = 20;
+int playerSize = 40;
 
-int wallBall;
+int ball;
 
 int score=0;
-boolean ballKill=false;
 
 boolean intro = true, dead = false;
 int peau = 0;
@@ -19,13 +18,8 @@ color[] skinColours = {color(0),color(255,0,0), color(0,255,0), color(0,0,255),
 color(255,255,0), color(255,0,255), color(0,255,255)};
 
 PImage[] flags = new PImage[17];
-int aX=0;
-int aY=0;
 
-double curX;
-double curY;
-
-int numberOfBalls=20;
+int numberOfBalls = 20;
 boolean[] exists = new boolean[numberOfBalls];
 PShape[] balls=new PShape[numberOfBalls];
 
@@ -34,45 +28,37 @@ int[] widthBall=new int[numberOfBalls];
 int[] ballSpeedX=new int[numberOfBalls];
 int[] ballSpeedY=new int[numberOfBalls];
 int[] ballSize=new int[numberOfBalls];
-
-void ballSize() {
-  for (int n=0;n<numberOfBalls;n++) {
-    ballSize[n]=n*5+playerSize-6;
+ 
+void assign(){
+  int edge = (int)(Math.random()*4);
+  for(int n = 0;n<numberOfBalls;n++){
+    ballSize[n]=n*5+playerSize/2;
+    if (edge == 0){
+      heightBall[n] = 0-ballSize[n];
+      widthBall[n] = (int)((Math.random()*901)+50);
+      ballSpeedY[n] = (int)(Math.random()*7)+1;
+    }
+    else if(edge == 1){
+      heightBall[n] = 1000+ballSize[n];
+      widthBall[n] = (int)((Math.random()*901)+50);
+      ballSpeedY[n] = (int)(Math.random()*-7)-1;
+    }
+    else if (edge == 2){
+      widthBall[n] = 0-ballSize[n];
+      heightBall[n] = (int)((Math.random()*901)+50);
+      ballSpeedX[n] = (int)(Math.random()*7)+1;
+    }
+    else{
+      widthBall[n] = 1000+ballSize[n];
+      heightBall[n] = (int)((Math.random()*901)+50);
+      ballSpeedX[n] = (int)(Math.random()*-7)-1;
+    }
   }
 }
-    
-void widthBallStart() {
-  for (int n=0;n<numberOfBalls;n++) {
-    widthBall[n]=(int)(Math.random()*1000);
-  }
-}
-
-void ballHeightStart() {
-  for (int n=0;n<numberOfBalls;n++) {
-    heightBall[n]=0-ballSize[n]-1;
-  }
-}
-
-void ballSpeedY() {
-  for (int n=0;n<numberOfBalls;n++) {
-    ballSpeedY[n]=(int)(((Math.random()*11)-5));
-  }
-}
-
-void ballSpeedX() {
-  for (int n=0;n<numberOfBalls;n++) {
-    ballSpeedX[n]=(int)(((Math.random()*11)-5));
-  }
-}
-  
-
-
 void setup() {
+  
   assignFlag();
-  widthBallStart();
-  ballHeightStart();
-  ballSpeedX();
-  ballSpeedY();
+  assign();
   
   size(1000,1000);
   background(240);
@@ -84,7 +70,7 @@ void draw(){
     peau();
   }
   else{
-    ballSize();
+    
     background(240);
     /**joueur*/
       if (peau < 7){
@@ -92,16 +78,23 @@ void draw(){
         circle(mouseX,mouseY,playerSize);
       }
       else{
-        flags[peau-7].resize(playerSize,0);
-        image(flags[peau-7], mouseX-(playerSize/2),mouseY-(playerSize/2));
+        image(flags[peau-7], mouseX-(playerSize/2),mouseY-(playerSize/2),playerSize,playerSize);
       }
     
   printScore();
   
-  ballsShowing();
   touchBall();
   touchWall();
+  ballsShowing();
+  move();
+
   }  
+}
+void move(){
+  for (int n=0;n<numberOfBalls;n++){
+    heightBall[n] += ballSpeedY[n];
+    widthBall[n] += ballSpeedX[n];
+  }
 }
 void mousePressed(){
   if(intro){
@@ -166,27 +159,29 @@ void printScore() {
   font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
   textFont(font);
   fill(0,255,0);
-  text("Score: " + score,850,50);
+  text("Points: " + score,850,50);
 }
 
 void touchBall(){
   for (int n=0;n<numberOfBalls;n++) {
     if( collide(widthBall[n],heightBall[n], ballSize[n] )){
       if (playerSize>ballSize[n]){
+        ball = n;
+        ball = 0;
         score++;
-        playerSize+=3;
-        ballKill=true;
-        heightBall[n]=-1000;
+        playerSize+=10;
+        reassign();
       }
       else{
         death();
       }
     }
   }
+ 
 }
 boolean collide(int w, int h, int size){
-  if ((w-mouseX)<(size+playerSize)/2+playerSize/2&&(w-mouseX)>-(size+playerSize)/2+playerSize/2){
-    if((h-mouseY)<(size+playerSize)/2+playerSize/2&&(h-mouseY)>-(size+playerSize)/2+playerSize/2){
+  if ((w-mouseX)<(size+playerSize)/2+10&&(w-mouseX)>(-(size+playerSize)/2+10)){
+    if((h-mouseY)<(size+playerSize)/2+10&&(h-mouseY)>(-(size+playerSize)/2+10)){
       return true;
     }
   }
@@ -194,17 +189,18 @@ boolean collide(int w, int h, int size){
   
 }
 void touchWall(){
-  for (wallBall=0;wallBall<numberOfBalls;wallBall++) {
-    if  (wallHit(widthBall[wallBall], heightBall[wallBall], ballSize[wallBall])){
-       removeAddBall();
+  for (ball=0;ball<numberOfBalls;ball++) {
+    if (wallHit(widthBall[ball], heightBall[ball], ballSize[ball]/2)){
+       reassign();
     }
   }
+
 }
 boolean wallHit(int w, int h, int size){
-  if (w<(0-size-11)||w>(1000+size+11)){
+  if (w<(0-size-1)||w>(1000+size+1)){
     return true;
   }
-  else if(h<(0-size-11)||h>(1000+size+11)){
+  else if(h<(0-size-1)||h>(1000+size+1)){
     return true;
   }
   else {
@@ -212,24 +208,35 @@ boolean wallHit(int w, int h, int size){
   }
   
 }
-
-void removeAddBall() {
-  heightBall[wallBall]=0-ballSize[wallBall]-1;
-  widthBall[wallBall]=(int)(Math.random()*1000);
-  ballSize[wallBall]=(int)((Math.random()*1000)/4);
-  ballSpeedY[wallBall]=(int)(((Math.random()*11)/-5));
-  ballSpeedX[wallBall]=(int)(((Math.random()*11)-5)); 
+ 
+void reassign(){
+  ballSize[ball]=ball*5+playerSize/2;
+  int edge = (int)(Math.random()*4);
+  if (edge == 0){
+    heightBall[ball] = 0-ballSize[ball];
+    widthBall[ball] = (int)((Math.random()*901)+50);
+    ballSpeedY[ball] = (int)(Math.random()*7)+1;
+  }
+  else if(edge == 1){
+    heightBall[ball] = 1000+ballSize[ball];
+    widthBall[ball] = (int)((Math.random()*901)+50);
+    ballSpeedY[ball] = (int)(Math.random()*-7)-1;
+  }
+  else if (edge == 2){
+    widthBall[ball] = 0-ballSize[ball];
+    heightBall[ball] = (int)((Math.random()*901)+50);
+    ballSpeedX[ball] = (int)(Math.random()*7)+1;
+  }
+  else{
+    widthBall[ball] = 1000+ballSize[ball];
+    heightBall[ball] = (int)((Math.random()*901)+50);
+    ballSpeedX[ball] = (int)(Math.random()*-7)-1;
+  }
 }
-
-
-
 void ballsShowing() {
   for (int n=0;n<numberOfBalls;n++) {
      fill(ballColours[n%4]);
-     balls[n]=createShape(ELLIPSE,widthBall[n],heightBall[n],ballSize[n],ballSize[n]);
-     shape(balls[n]);
-     heightBall[n]+=ballSpeedY[n];
-     widthBall[n]+=ballSpeedX[n];
+     circle(widthBall[n], heightBall[n], ballSize[n]);
   }
 }
 void assignFlag(){
