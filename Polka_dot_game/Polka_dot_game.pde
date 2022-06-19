@@ -73,20 +73,20 @@ void draw(){
     
     background(240);
     /**joueur*/
-      if (peau < 7){
-        fill(skinColours[peau]);
-        circle(mouseX,mouseY,playerSize);
-      }
-      else{
-        image(flags[peau-7], mouseX-(playerSize/2),mouseY-(playerSize/2),playerSize,playerSize);
-      }
+    if (peau < 7){
+      fill(skinColours[peau]);
+      circle(mouseX,mouseY,playerSize);
+    }
+    else{
+      image(flags[peau-7], mouseX-(playerSize/2),mouseY-(playerSize/2),playerSize,playerSize);
+    }
     
-  printScore();
+    printScore();
   
-  touchBall();
-  touchWall();
-  ballsShowing();
-  move();
+    touchBall();
+    touchWall();
+    ballsShowing();
+    move();
 
   }  
 }
@@ -216,21 +216,25 @@ void reassign(){
     heightBall[ball] = 0-ballSize[ball];
     widthBall[ball] = (int)((Math.random()*901)+50);
     ballSpeedY[ball] = (int)(Math.random()*7)+1;
+    ballSpeedX[ball] = (int)(Math.random()*15)-7;
   }
   else if(edge == 1){
     heightBall[ball] = 1000+ballSize[ball];
     widthBall[ball] = (int)((Math.random()*901)+50);
     ballSpeedY[ball] = (int)(Math.random()*-7)-1;
+    ballSpeedX[ball] = (int)(Math.random()*15)-7;
   }
   else if (edge == 2){
     widthBall[ball] = 0-ballSize[ball];
     heightBall[ball] = (int)((Math.random()*901)+50);
     ballSpeedX[ball] = (int)(Math.random()*7)+1;
+    ballSpeedY[ball] = (int)(Math.random()*15)-7;
   }
   else{
     widthBall[ball] = 1000+ballSize[ball];
     heightBall[ball] = (int)((Math.random()*901)+50);
     ballSpeedX[ball] = (int)(Math.random()*-7)-1;
+    ballSpeedY[ball] = (int)(Math.random()*15)-7;
   }
 }
 void ballsShowing() {
