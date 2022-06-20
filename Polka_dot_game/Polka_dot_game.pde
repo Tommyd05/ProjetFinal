@@ -37,21 +37,25 @@ void assign(){
       heightBall[n] = 0-ballSize[n];
       widthBall[n] = (int)((Math.random()*901)+50);
       ballSpeedY[n] = (int)(Math.random()*7)+1;
+      ballSpeedX[n] = (int)(Math.random()*15)-7;
     }
     else if(edge == 1){
       heightBall[n] = 1000+ballSize[n];
       widthBall[n] = (int)((Math.random()*901)+50);
       ballSpeedY[n] = (int)(Math.random()*-7)-1;
+      ballSpeedX[n] = (int)(Math.random()*15)-7;
     }
     else if (edge == 2){
       widthBall[n] = 0-ballSize[n];
       heightBall[n] = (int)((Math.random()*901)+50);
       ballSpeedX[n] = (int)(Math.random()*7)+1;
+      ballSpeedY[n] = (int)(Math.random()*15)-7;
     }
     else{
       widthBall[n] = 1000+ballSize[n];
       heightBall[n] = (int)((Math.random()*901)+50);
       ballSpeedX[n] = (int)(Math.random()*-7)-1;
+      ballSpeedY[n] = (int)(Math.random()*15)-7;
     }
   }
 }
