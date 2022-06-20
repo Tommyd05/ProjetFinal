@@ -32,28 +32,28 @@ void assign(){
     int edge = (int)(Math.random()*4);
     ballSize[n]=n*5+playerSize/2;
     if (edge == 0){
-      heightBall[n] = 0-ballSize[n]*2;
+      heightBall[n] = 0-ballSize[n];
       widthBall[n] = (int)((Math.random()*901)+50);
-      ballSpeedY[n] = (int)(Math.random()*7)+1;
-      ballSpeedX[n] = (int)(Math.random()*15)-7;
+      ballSpeedY[n] = (int)(Math.random()*12)+1;
+      ballSpeedX[n] = (int)(Math.random()*25)-12;
     }
     else if(edge == 1){
-      heightBall[n] = 1000+ballSize[n]*2;
+      heightBall[n] = 1000+ballSize[n];
       widthBall[n] = (int)((Math.random()*901)+50);
-      ballSpeedY[n] = (int)(Math.random()*-7)-1;
-      ballSpeedX[n] = (int)(Math.random()*15)-7;
+      ballSpeedY[n] = (int)(Math.random()*12)-1;
+      ballSpeedX[n] = (int)(Math.random()*25)-12;
     }
     else if (edge == 2){
-      widthBall[n] = 0-ballSize[n]*2;
+      widthBall[n] = 0-ballSize[n];
       heightBall[n] = (int)((Math.random()*901)+50);
-      ballSpeedX[n] = (int)(Math.random()*7)+1;
-      ballSpeedY[n] = (int)(Math.random()*15)-7;
+      ballSpeedX[n] = (int)(Math.random()*12)+1;
+      ballSpeedY[n] = (int)(Math.random()*25)-12;
     }
     else{
-      widthBall[n] = 1000+ballSize[n]*2;
+      widthBall[n] = 1000+ballSize[n];
       heightBall[n] = (int)((Math.random()*901)+50);
-      ballSpeedX[n] = (int)(Math.random()*-7)-1;
-      ballSpeedY[n] = (int)(Math.random()*15)-7;
+      ballSpeedX[n] = (int)(Math.random()*-12)-1;
+      ballSpeedY[n] = (int)(Math.random()*25)-12;
     }
   }
 }
@@ -170,24 +170,24 @@ void touchBall(){
       if (playerSize>ballSize[n]){
 
         score++;
-        playerSize+=10;
+        playerSize+=5;
         int edge = (int)(Math.random()*4);
         widthBall[n] = reassignWidth(edge, ballSize[n]);
         heightBall[n] = reassignHeight(edge, ballSize[n]);
         ballSpeedX[n] = reassignSpeedX(edge);
         ballSpeedY[n] = reassignSpeedY(edge);
-        ballSize[n]=n*5+playerSize/2;
+        ballSize[n] = (n+1)*playerSize/2;
       }
       else{
         death();
       }
     }
   }
- 
 }
+
 boolean collide(int w, int h, int size){
-  if ((w-mouseX)<(size+playerSize)/2+10&&(w-mouseX)>(-(size+playerSize)/2+10)){
-    if((h-mouseY)<(size+playerSize)/2+10&&(h-mouseY)>(-(size+playerSize)/2+10)){
+  if ((w-mouseX)<(size+playerSize)/2&&(w-mouseX)>(-(size+playerSize)/2)){
+    if((h-mouseY)<(size+playerSize)/2&&(h-mouseY)>(-(size+playerSize)/2)){
       return true;
     }
   }
@@ -202,6 +202,7 @@ void touchWall(){
       heightBall[n] = reassignHeight(edge, ballSize[n]);
       ballSpeedX[n] = reassignSpeedX(edge);
       ballSpeedY[n] = reassignSpeedY(edge);
+      ballSize[n] = (n+1)*playerSize/4;
     }
   }
 
@@ -221,10 +222,10 @@ boolean wallHit(int w, int h, int size){
  
 int reassignWidth(int edge, int size){
   if (edge == 3){
-    return 1000+size*2;
+    return 1000+size;
   }
   else if (edge == 2){
-    return 0-size*2;
+    return 0-size;
   }
   else{
     return (int)((Math.random()*901)+50);
@@ -232,10 +233,10 @@ int reassignWidth(int edge, int size){
 }
 int reassignHeight(int edge, int size){
   if (edge == 0){
-    return 0-size*2;
+    return 0-size;
   }
   else if(edge == 1){
-    return 1000+size*2;
+    return 1000+size;
   }
   else{
     return (int)((Math.random()*901)+50);
