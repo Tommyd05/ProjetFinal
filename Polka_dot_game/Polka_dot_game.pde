@@ -71,6 +71,9 @@ void draw(){
   if (intro){
     peau();
   }
+  else if (dead){
+    
+  }
   else{
     
     background(240);
@@ -112,34 +115,36 @@ void mousePressed(){
     }
   }
   if (dead){
-    
+    intro = true;
+    assign();
+    background(240);
+    intro();
+    dead = false;
   }
 }
 void intro(){ 
-  if(intro){
-    fill(0);
-    textSize(40);
-    fill(0,150,0);
-    text("Cliquez l'écran pour changer votre peau!", 160,600);
+
+  fill(0);
+  textSize(40);
+  fill(0,150,0);
+  text("Cliquez l'écran pour changer votre peau!", 160,600);
     
-    textSize(100);
-    fill(200,0,0);
-    text("P O L K A - D O T",170,200);
+  textSize(100);
+  fill(200,0,0);
+  text("P O L K A - D O T",170,200);
     
-    textSize(30);
-    fill(0,0,200);
-    text("Absorbez les plus petites balles grandir",270,350);
-    text("Évitez les balles plus grandes, elles vous tuent",220,400);
+  textSize(30);
+  fill(0,0,200);
+  text("Absorbez les plus petites balles grandir",270,350);
+  text("Évitez les balles plus grandes, elles vous tuent",220,400);
     
-    fill(200,200,0);
-    rect(340,790,320,120,10);
-    fill(255);
-    rect(350,800,300,100,10);
-    textSize(80);
-    fill(0);
-    text("JOUER",385,875);
-    
-  }
+  fill(200,200,0);
+  rect(340,790,320,120,10);
+  fill(255);
+  rect(350,800,300,100,10);
+  textSize(80);
+  fill(0);
+  text("JOUER",385,875);
 }
 
 void peau(){
@@ -281,10 +286,11 @@ void assignFlag(){
 }
 void death(){
     dead = true;
-    noLoop();
+    cursor();
     background(0);
     fill(255);
     textSize(100);
-    text("GAME OVER", 200,500);
-    
+    text("GAME OVER", 190,400);
+    textSize(60);
+    text("Points: " + score, 390, 600);
   }
