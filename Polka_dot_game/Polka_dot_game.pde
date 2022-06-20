@@ -6,8 +6,6 @@
 
 int playerSize = 40;
 
-int ball;
-
 int score=0;
 
 boolean intro = true, dead = false;
@@ -20,7 +18,7 @@ color(255,255,0), color(255,0,255), color(0,255,255)};
 PImage[] flags = new PImage[17];
 
 int numberOfBalls = 20;
-boolean[] exists = new boolean[numberOfBalls];
+
 PShape[] balls=new PShape[numberOfBalls];
 
 int[] heightBall=new int[numberOfBalls];
@@ -30,29 +28,29 @@ int[] ballSpeedY=new int[numberOfBalls];
 int[] ballSize=new int[numberOfBalls];
  
 void assign(){
-  int edge = (int)(Math.random()*4);
   for(int n = 0;n<numberOfBalls;n++){
+    int edge = (int)(Math.random()*4);
     ballSize[n]=n*5+playerSize/2;
     if (edge == 0){
-      heightBall[n] = 0-ballSize[n];
+      heightBall[n] = 0-ballSize[n]*2;
       widthBall[n] = (int)((Math.random()*901)+50);
       ballSpeedY[n] = (int)(Math.random()*7)+1;
       ballSpeedX[n] = (int)(Math.random()*15)-7;
     }
     else if(edge == 1){
-      heightBall[n] = 1000+ballSize[n];
+      heightBall[n] = 1000+ballSize[n]*2;
       widthBall[n] = (int)((Math.random()*901)+50);
       ballSpeedY[n] = (int)(Math.random()*-7)-1;
       ballSpeedX[n] = (int)(Math.random()*15)-7;
     }
     else if (edge == 2){
-      widthBall[n] = 0-ballSize[n];
+      widthBall[n] = 0-ballSize[n]*2;
       heightBall[n] = (int)((Math.random()*901)+50);
       ballSpeedX[n] = (int)(Math.random()*7)+1;
       ballSpeedY[n] = (int)(Math.random()*15)-7;
     }
     else{
-      widthBall[n] = 1000+ballSize[n];
+      widthBall[n] = 1000+ballSize[n]*2;
       heightBall[n] = (int)((Math.random()*901)+50);
       ballSpeedX[n] = (int)(Math.random()*-7)-1;
       ballSpeedY[n] = (int)(Math.random()*15)-7;
@@ -168,13 +166,17 @@ void printScore() {
 
 void touchBall(){
   for (int n=0;n<numberOfBalls;n++) {
-    if( collide(widthBall[n],heightBall[n], ballSize[n] )){
+    if(collide(widthBall[n], heightBall[n], ballSize[n])){
       if (playerSize>ballSize[n]){
-        ball = n;
-        ball = 0;
+
         score++;
         playerSize+=10;
-        reassign();
+        int edge = (int)(Math.random()*4);
+        widthBall[n] = reassignWidth(edge, ballSize[n]);
+        heightBall[n] = reassignHeight(edge, ballSize[n]);
+        ballSpeedX[n] = reassignSpeedX(edge);
+        ballSpeedY[n] = reassignSpeedY(edge);
+        ballSize[n]=n*5+playerSize/2;
       }
       else{
         death();
@@ -193,18 +195,22 @@ boolean collide(int w, int h, int size){
   
 }
 void touchWall(){
-  for (ball=0;ball<numberOfBalls;ball++) {
-    if (wallHit(widthBall[ball], heightBall[ball], ballSize[ball]/2)){
-       reassign();
+  for (int n=0;n<numberOfBalls;n++) {
+    if (wallHit(widthBall[n], heightBall[n], ballSize[n]/2)){ 
+      int edge = (int)(Math.random()*4);
+      widthBall[n] = reassignWidth(edge, ballSize[n]);
+      heightBall[n] = reassignHeight(edge, ballSize[n]);
+      ballSpeedX[n] = reassignSpeedX(edge);
+      ballSpeedY[n] = reassignSpeedY(edge);
     }
   }
 
 }
 boolean wallHit(int w, int h, int size){
-  if (w<(0-size-1)||w>(1000+size+1)){
+  if (w<(0-size*2)||w>(1000+size*2)){
     return true;
   }
-  else if(h<(0-size-1)||h>(1000+size+1)){
+  else if(h<(0-size*2)||h>(1000+size*2)){
     return true;
   }
   else {
@@ -213,32 +219,43 @@ boolean wallHit(int w, int h, int size){
   
 }
  
-void reassign(){
-  ballSize[ball]=ball*5+playerSize/2;
-  int edge = (int)(Math.random()*4);
-  if (edge == 0){
-    heightBall[ball] = 0-ballSize[ball];
-    widthBall[ball] = (int)((Math.random()*901)+50);
-    ballSpeedY[ball] = (int)(Math.random()*7)+1;
-    ballSpeedX[ball] = (int)(Math.random()*15)-7;
-  }
-  else if(edge == 1){
-    heightBall[ball] = 1000+ballSize[ball];
-    widthBall[ball] = (int)((Math.random()*901)+50);
-    ballSpeedY[ball] = (int)(Math.random()*-7)-1;
-    ballSpeedX[ball] = (int)(Math.random()*15)-7;
+int reassignWidth(int edge, int size){
+  if (edge == 3){
+    return 1000+size*2;
   }
   else if (edge == 2){
-    widthBall[ball] = 0-ballSize[ball];
-    heightBall[ball] = (int)((Math.random()*901)+50);
-    ballSpeedX[ball] = (int)(Math.random()*7)+1;
-    ballSpeedY[ball] = (int)(Math.random()*15)-7;
+    return 0-size*2;
   }
   else{
-    widthBall[ball] = 1000+ballSize[ball];
-    heightBall[ball] = (int)((Math.random()*901)+50);
-    ballSpeedX[ball] = (int)(Math.random()*-7)-1;
-    ballSpeedY[ball] = (int)(Math.random()*15)-7;
+    return (int)((Math.random()*901)+50);
+  }
+}
+int reassignHeight(int edge, int size){
+  if (edge == 0){
+    return 0-size*2;
+  }
+  else if(edge == 1){
+    return 1000+size*2;
+  }
+  else{
+    return (int)((Math.random()*901)+50);
+
+  }
+}
+int reassignSpeedX(int edge){
+  if (edge == 2|| edge == 3){
+    return (int)(Math.random()*7)+1;
+  }
+  else{  
+    return (int)(Math.random()*15)-7;
+  }
+}
+int reassignSpeedY(int edge){
+  if (edge == 1|| edge == 2){
+    return (int)(Math.random()*7)+1;
+  }
+  else{  
+    return (int)(Math.random()*15)-7;
   }
 }
 void ballsShowing() {
