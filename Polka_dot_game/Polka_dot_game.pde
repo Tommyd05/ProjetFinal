@@ -69,6 +69,8 @@ void setup() {
 
 void draw(){
   if (intro){
+    score=0;
+    playerSize=40;
     peau();
   }
   else if (dead){
