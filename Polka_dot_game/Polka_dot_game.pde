@@ -1,32 +1,39 @@
 /**
 * Polka-dot game. Un genre de agar.io à un joueur.
 * Auteurs: Thomas Dufour, Zachary Wilson
-* Version: 17 juin 2022
+* Version: 21 juin 2022
 */
 
 int playerSize = 40;
 
 int score=0;
 
+/**Si on se trouve dans cette partie du jeu*/
 boolean intro = true, dead = false;
+
+/**Utilisé comme indexe pour la peau du joueur*/
 int peau = 0;
+/**Couleurs de balles*/
 color[] ballColours = {color(255,150,0), color(200,255,200), color(0,0,100),
 color(120,0,150)};
+/**Couleurs de peau*/
 color[] skinColours = {color(0),color(255,0,0), color(0,255,0), color(0,0,255), 
 color(255,255,0), color(255,0,255), color(0,255,255)};
 
+/**Liste pour les drapeaux*/
 PImage[] flags = new PImage[17];
+
 
 int numberOfBalls = 20;
 
-PShape[] balls=new PShape[numberOfBalls];
-
+//Valeurs pour chaque balle
 int[] heightBall=new int[numberOfBalls];
 int[] widthBall=new int[numberOfBalls];
 int[] ballSpeedX=new int[numberOfBalls];
 int[] ballSpeedY=new int[numberOfBalls];
 int[] ballSize=new int[numberOfBalls];
- 
+
+ /**Assigne les valeurs de départ aux balles*/
 void assign(){
   for(int n = 0;n<numberOfBalls;n++){
     int edge = (int)(Math.random()*4);
@@ -97,12 +104,14 @@ void draw(){
 
   }  
 }
+/**Movement des balles*/
 void move(){
   for (int n=0;n<numberOfBalls;n++){
     heightBall[n] += ballSpeedY[n];
     widthBall[n] += ballSpeedX[n];
   }
 }
+/**Utilisé seulement lors de l'intro et après la mort*/
 void mousePressed(){
   if(intro){
     if (mouseX<660&&mouseX>340&&mouseY<910&&mouseY>790){
@@ -124,6 +133,7 @@ void mousePressed(){
     dead = false;
   }
 }
+/**L'intro du jeu*/
 void intro(){ 
 
   fill(0);
@@ -148,7 +158,7 @@ void intro(){
   fill(0);
   text("JOUER",385,875);
 }
-
+/**Change la peau du joueur*/
 void peau(){
   fill(0);
   circle(500,700,72);
@@ -163,6 +173,7 @@ void peau(){
     
   }
 }
+/**Affiche le score*/
 void printScore() {
   PFont font;
   font=loadFont("TimesNewRomanPS-BoldMT-30.vlw");
@@ -170,7 +181,7 @@ void printScore() {
   fill(0,255,0);
   text("Points: " + score,850,50);
 }
-
+/**Si le joueur touche à une balle*/
 void touchBall(){
   for (int n=0;n<numberOfBalls;n++) {
     if(collide(widthBall[n], heightBall[n], ballSize[n])){
@@ -191,7 +202,7 @@ void touchBall(){
     }
   }
 }
-
+/**Pour voir si le joueur touche à une balle*/
 boolean collide(int w, int h, int size){
   if ((w-mouseX)<(size+playerSize)/2&&(w-mouseX)>(-(size+playerSize)/2)){
     if((h-mouseY)<(size+playerSize)/2&&(h-mouseY)>(-(size+playerSize)/2)){
@@ -201,6 +212,7 @@ boolean collide(int w, int h, int size){
   return false; 
   
 }
+/**Si une balle sort de l'écran*/
 void touchWall(){
   for (int n=0;n<numberOfBalls;n++) {
     if (wallHit(widthBall[n], heightBall[n], ballSize[n]/2)){ 
@@ -214,6 +226,7 @@ void touchWall(){
   }
 
 }
+/** Vérifie si une balle sort de l'écran*/
 boolean wallHit(int w, int h, int size){
   if (w<(0-size*2)||w>(1000+size*2)){
     return true;
@@ -226,7 +239,7 @@ boolean wallHit(int w, int h, int size){
   }
   
 }
- 
+/**Réassigne la coordonnée X*/
 int reassignWidth(int edge, int size){
   if (edge == 3){
     return 1000+size;
@@ -238,6 +251,7 @@ int reassignWidth(int edge, int size){
     return (int)((Math.random()*901)+50);
   }
 }
+/**Réassigne la coordonnée Y*/
 int reassignHeight(int edge, int size){
   if (edge == 0){
     return 0-size;
@@ -250,6 +264,7 @@ int reassignHeight(int edge, int size){
 
   }
 }
+/**Réassigne la vitesse X*/
 int reassignSpeedX(int edge){
   if (edge == 2|| edge == 3){
     return (int)(Math.random()*7)+1;
@@ -258,6 +273,7 @@ int reassignSpeedX(int edge){
     return (int)(Math.random()*15)-7;
   }
 }
+/**Réassigne la vitesse Y*/
 int reassignSpeedY(int edge){
   if (edge == 1|| edge == 2){
     return (int)(Math.random()*7)+1;
@@ -266,12 +282,14 @@ int reassignSpeedY(int edge){
     return (int)(Math.random()*15)-7;
   }
 }
+/**Affiche les balles*/
 void ballsShowing() {
   for (int n=0;n<numberOfBalls;n++) {
      fill(ballColours[n%4]);
      circle(widthBall[n], heightBall[n], ballSize[n]);
   }
 }
+/**Importe les drapeaux; technique qui marchait le mieux*/
 void assignFlag(){
   BufferedReader flagReader;
   String line;
@@ -286,6 +304,7 @@ void assignFlag(){
     }
   }
 }
+/**Quand tu meurt*/
 void death(){
     dead = true;
     cursor();
