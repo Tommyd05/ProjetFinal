@@ -81,7 +81,13 @@ void draw(){
     peau();
   }
   else if (dead){
-    
+    background(0);
+    ballsShowing();
+    fill(255);
+    textSize(100);
+    text("GAME OVER", 190,400);
+    textSize(60);
+    text("Points: " + score, 390, 600);
   }
   else{
     
@@ -143,8 +149,13 @@ void intro(){
     
   textSize(100);
   fill(200,0,0);
-  text("P O L K A - D O T",170,200);
-    
+  /**Ceci ne devrait pas être nécessaire mais ça buggait */
+  if (dead){
+    text("P O L K A - D O T",95,200);
+  }
+  else{
+    text("P O L K A - D O T",170,200);
+  }
   textSize(30);
   fill(0,0,200);
   text("Absorbez les plus petites balles grandir",270,350);
@@ -156,7 +167,14 @@ void intro(){
   rect(350,800,300,100,10);
   textSize(80);
   fill(0);
-  text("JOUER",385,875);
+  /**Même chose*/
+  if (dead){
+    text("JOUER",370,875);
+  }
+  else{
+    text("JOUER",385,875);
+  }
+;
 }
 /**Change la peau du joueur*/
 void peau(){
@@ -308,10 +326,4 @@ void assignFlag(){
 void death(){
     dead = true;
     cursor();
-    background(0);
-    fill(255);
-    textSize(100);
-    text("GAME OVER", 190,400);
-    textSize(60);
-    text("Points: " + score, 390, 600);
   }
